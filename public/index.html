@@ -31,6 +31,14 @@ h2{font-size:18px;margin:22px 0 10px;font-weight:700}
 .hero p{margin:10px 0 18px;font-size:14px;opacity:.9;max-width:260px}
 .hero .btn{background:#fffaf0;color:var(--g);border-radius:999px;padding:11px 20px;font-weight:700;font-size:14px}
 .hero svg{position:absolute;right:-10px;bottom:-14px;width:150px;opacity:.25}
+
+.category-tiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:4px 0 12px}
+.category-tile{min-width:0;text-align:left;display:flex;flex-direction:column;align-items:flex-start;gap:5px;padding:14px 12px;border-radius:19px;background:linear-gradient(145deg,#fff,rgba(232,241,228,.82));border:1px solid rgba(47,107,69,.10);box-shadow:inset 0 1px 1px #fff,0 7px 18px rgba(35,70,50,.08)}
+.category-tile span{font-size:27px;line-height:1.2}
+.category-tile b{font-size:13px;color:var(--g)}
+.category-tile small{font-size:10.5px;color:var(--mute)}
+.category-tile:active{background:#e8f1e4}
+@media(min-width:600px){.category-tiles{grid-template-columns:repeat(4,minmax(0,1fr))}}
 .cats{display:flex;gap:10px;overflow-x:auto;padding:2px 2px 8px;scrollbar-width:none}
 .cats::-webkit-scrollbar{display:none}
 .cat{flex:0 0 auto;border-radius:16px;padding:10px 16px;font-size:13px;font-weight:600;color:var(--g)}
@@ -183,7 +191,18 @@ nav button svg{transition:transform .55s cubic-bezier(.22,1.25,.36,1)}
 <section class="view on" id="home">
   <div class="hero"><h1>Bring nature<br>home.</h1><p>Plants, seeds and gardening essentials from trusted local sellers.</p><button class="btn" data-go="search">Shop now</button>
   <svg viewBox="0 0 32 32" fill="none" stroke="#fff" stroke-width="1.5"><path d="M16 29V15M16 15C16 8 10 4 4 5c0 7 5 11 12 10zM16 19c0-5 4-8 11-8 0 6-4 9-11 8z"/></svg></div>
-  <h2>Shop by category</h2><div class="cats" id="homecats"></div>
+  <h2>Shop by category</h2>
+<div class="category-tiles">
+<button class="category-tile" data-cat="Indoor Plants"><span>🪴</span><b>Indoor Plants</b><small>Fresh greens for home</small></button>
+<button class="category-tile" data-cat="Flowering Plants"><span>🌸</span><b>Flowering Plants</b><small>Brighten every corner</small></button>
+<button class="category-tile" data-cat="Seeds"><span>🌱</span><b>Seeds</b><small>Grow from the start</small></button>
+<button class="category-tile" data-cat="Flower Seeds"><span>🌼</span><b>Flower Seeds</b><small>Colourful blooms</small></button>
+<button class="category-tile" data-cat="Vegetable Seeds"><span>🥬</span><b>Vegetable Seeds</b><small>Kitchen garden picks</small></button>
+<button class="category-tile" data-cat="Fruit Plants"><span>🍋</span><b>Fruit Plants</b><small>Grow your own fruit</small></button>
+<button class="category-tile" data-cat="Pots & Planters"><span>🪴</span><b>Pots & Planters</b><small>Pretty homes for plants</small></button>
+<button class="category-tile" data-cat="Soil & Fertilizers"><span>🌿</span><b>Soil & Fertilizers</b><small>Healthy growing essentials</small></button>
+</div>
+<div class="cats" id="homecats"></div>
   <h2>Featured products</h2><div class="grid" id="featured"></div>
   <h2>Why PAUDIVA</h2>
   <div class="why"><div class="glass"><b>Verified sellers</b>Every seller is reviewed before listing.</div><div class="glass"><b>Pay your way</b>UPI, cards or Cash on Delivery.</div><div class="glass"><b>Track every order</b>Live status from seller to doorstep.</div><div class="glass"><b>Honest reviews</b>Only verified buyers can review.</div></div>
@@ -219,7 +238,7 @@ nav button svg{transition:transform .55s cubic-bezier(.22,1.25,.36,1)}
 
 <section class="view" id="account">
   <h2 style="margin-top:18px">My account</h2>
-  <button class="big" id="loginOpen">Login / Create account</button>
+  
   <div class="prof glass"><div class="av" id="av">P</div><div><b id="un" style="font-size:17px"></b><div class="ps" id="uid"></div><span class="bd">✓ Verified</span><span class="bd">Buyer</span><span class="bd n">Seller: not registered</span></div></div>
   <div class="stats"><div class="glass"><b id="s-orders">0</b>Orders</div><div class="glass"><b>0</b>Wishlist</div><div class="glass"><b id="s-cart">0</b>In cart</div></div>
   <h2>More</h2>
@@ -316,7 +335,7 @@ nav button svg{transition:transform .55s cubic-bezier(.22,1.25,.36,1)}
 <div class="toast glass" id="toast"></div>
 
 <script>
-var CATS=["All","Indoor Plants","Outdoor Plants","Flowering Plants","Seeds","Gardening Tools","Pots & Planters","Soil & Fertilizers","Eco-friendly"];
+var CATS=["All","Indoor Plants","Outdoor Plants","Flowering Plants","Seeds","Flower Seeds","Vegetable Seeds","Fruit Plants","Succulents","Herbs","Pots & Planters","Grow Bags","Soil & Fertilizers","Organic Manure","Gardening Tools"];
 var STAT=["PLACED","CONFIRMED","PACKED","OUT_FOR_DELIVERY","DELIVERED"],STEPS=["Order placed","Seller confirmed","Packed","Out for delivery","Delivered"];
 var TC=["Order","Payment","Delivery","Refund","Account","Other"];
 var TSTAT={WAITING:"Waiting for agent",AGENT_CONNECTED:"Agent connected",RESOLVED:"Resolved"};
@@ -348,9 +367,9 @@ function go(v){
   window.scrollTo(0,0);
   if(v==="cart")renderCart();if(v==="search")renderSearch();if(v==="account")paintAcc();if(v==="support"){tchips();loadTk().catch(function(){})}
   moveInd()}
-function showGate(){$("gate").style.display="none"}
+function showGate(){$("gate").style.display=user?"none":"flex"}
 function mask(u){return u.email?u.email:"+91 "+u.mobile.slice(0,2)+"XXXXXX"+u.mobile.slice(-2)}
-function paintAcc(){if(!user){$("un").textContent="Guest";$("uid").textContent="Browse PAUDIVA without signing in";$("logout").style.display="none";return;}$("logout").style.display="block";$("av").textContent=(user.email?user.email[0]:"P").toUpperCase();$("un").textContent=user.email?user.email.split("@")[0]:"PAUDIVA member";$("uid").textContent=mask(user)+(user.role!=="BUYER"?" \u00b7 "+user.role:"");$("s-cart").textContent=cartCount();
+function paintAcc(){if(!user)return;$("logout").style.display="block";$("av").textContent=(user.email?user.email[0]:"P").toUpperCase();$("un").textContent=user.email?user.email.split("@")[0]:"PAUDIVA member";$("uid").textContent=mask(user)+(user.role!=="BUYER"?" \u00b7 "+user.role:"");$("s-cart").textContent=cartCount();
   api("/api/orders").then(function(d){$("s-orders").textContent=d.orders.length}).catch(function(){})}
 function openT(){$("tmodal").classList.add("on")}
 function closeT(){$("tmodal").classList.remove("on")}
@@ -382,7 +401,6 @@ document.addEventListener("click",function(e){
   else if(t.dataset.q){var k=t.dataset.q,p2=ALL[k],nq=cart[k]+Number(t.dataset.d);if(nq<1)delete cart[k];else if(p2&&nq>p2.stock)toast("Only "+p2.stock+" in stock");else cart[k]=nq;renderCart()}
   else if(t.dataset.sug){$("q").value=t.dataset.sug;renderSearch()}});
 $("q").addEventListener("input",renderSearch);
-$("loginOpen").onclick=function(){$("gate").style.display="flex"};
 $("tbtn").onclick=trackOrder;
 $("checkout").onclick=function(){var ids=Object.keys(cart);if(!ids.length)return toast("Cart is empty");
   var b={items:ids.map(function(i){return{productId:i,qty:cart[i]}}),name:$("cname").value.trim(),mobile:$("cmob").value.trim(),address:$("cadr").value.trim(),pincode:$("cpin").value.trim()};
