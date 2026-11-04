@@ -466,7 +466,16 @@ $("demoLogin").onclick=function(){
 };
 $("resend").onclick=function(){sendOtp(true)};
 $("change").onclick=function(){clearInterval(cd);step(1)};
-$("verify").onclick=function(){if(!/^[0-9]{6}$/.test($("code").value.trim()))return toast("Enter any 6 digits");user={mobile:mode==="mobile"?val:null,email:mode==="email"?val:null,role:"BUYER",demo:true};sessionStorage.setItem("paudiva_demo_user",JSON.stringify(user));showGate();paintAcc();go("home");toast("Welcome to PAUDIVA demo")};
+$("verify").onclick=function(){
+  if(!/^[0-9]{6}$/.test($("code").value.trim()))return toast("Enter any 6 digits");
+  user={mobile:mode==="mobile"?val:null,email:mode==="email"?val:null,role:"BUYER",demo:true};
+  try{localStorage.setItem("paudiva_demo_user",JSON.stringify(user));sessionStorage.setItem("paudiva_demo_user",JSON.stringify(user));}catch(e){}
+  $("gate").style.display="none";
+  document.querySelectorAll(".view").forEach(function(x){x.classList.toggle("on",x.id==="home")});
+  document.querySelectorAll("nav button").forEach(function(x){x.classList.toggle("on",x.dataset.go==="home")});
+  paintAcc();moveInd();window.scrollTo(0,0);
+  toast("Welcome to PAUDIVA demo");
+};
 $("logout").onclick=function(){user=null;sessionStorage.removeItem("paudiva_demo_user");tks=[];seen={};cur=null;step(1);$("ident").value="";$("agree").checked=false;showGate();go("home")};
 $("tlink").onclick=openT;$("tclose").onclick=closeT;
 $("tagree").onclick=function(){$("agree").checked=true;closeT()};
