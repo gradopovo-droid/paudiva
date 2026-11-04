@@ -201,6 +201,10 @@ nav button svg{transition:transform .55s cubic-bezier(.22,1.25,.36,1)}
 <button class="category-tile" data-cat="Fruit Plants"><span>🍋</span><b>Fruit Plants</b><small>Grow your own fruit</small></button>
 <button class="category-tile" data-cat="Pots & Planters"><span>🪴</span><b>Pots & Planters</b><small>Pretty homes for plants</small></button>
 <button class="category-tile" data-cat="Soil & Fertilizers"><span>🌿</span><b>Soil & Fertilizers</b><small>Healthy growing essentials</small></button>
+<button class="category-tile" data-cat="Flowers"><span>💐</span><b>Fresh Flowers</b><small>Beautiful blooms</small></button>
+<button class="category-tile" data-cat="Manures"><span>🪱</span><b>Manures & Compost</b><small>Organic plant nutrition</small></button>
+<button class="category-tile" data-cat="Fertilizers"><span>🧪</span><b>Fertilizers</b><small>Feed your plants</small></button>
+<button class="category-tile" data-cat="Potting Mix"><span>🪴</span><b>Potting Mix</b><small>Ready-to-grow mixes</small></button>
 </div>
 <div class="cats" id="homecats"></div>
   <h2>Featured products</h2><div class="grid" id="featured"></div>
@@ -337,7 +341,7 @@ nav button svg{transition:transform .55s cubic-bezier(.22,1.25,.36,1)}
 <div class="toast glass" id="toast"></div>
 
 <script>
-var CATS=["All","Indoor Plants","Outdoor Plants","Flowering Plants","Seeds","Flower Seeds","Vegetable Seeds","Fruit Plants","Succulents","Herbs","Pots & Planters","Grow Bags","Soil & Fertilizers","Organic Manure","Gardening Tools"];
+var CATS=["All","Indoor Plants","Outdoor Plants","Flowers","Flowering Plants","Seeds","Flower Seeds","Vegetable Seeds","Fruit Plants","Succulents","Herbs","Pots & Planters","Grow Bags","Soil","Soil & Fertilizers","Manures","Organic Manure","Fertilizers","Potting Mix","Gardening Tools"];
 var STAT=["PLACED","CONFIRMED","PACKED","OUT_FOR_DELIVERY","DELIVERED"],STEPS=["Order placed","Seller confirmed","Packed","Out for delivery","Delivered"];
 var TC=["Order","Payment","Delivery","Refund","Account","Other"];
 var TSTAT={WAITING:"Waiting for agent",AGENT_CONNECTED:"Agent connected",RESOLVED:"Resolved"};
@@ -353,9 +357,38 @@ function toast(t){var e=$("toast");e.textContent=t;e.classList.add("on");setTime
 function card(p){return '<div class="p glass"><div class="img">'+LEAF+'</div><div class="pb"><div class="pn">'+esc(p.title)+'</div><div class="ps">'+esc(p.category)+' \u00b7 No reviews yet</div><div class="pr"><div class="price">'+rs(p.pricePaise)+'<s>'+rs(p.mrpPaise)+'</s></div><button class="add" data-add="'+esc(p.id)+'" aria-label="Add to cart"'+(p.stock<1?" disabled":"")+'>+</button></div></div></div>'}
 function keep(list){list.forEach(function(p){ALL[p.id]=p})}
 function chips(el){el.innerHTML=CATS.map(function(c){return '<button class="cat glass'+(c===cat?" on":"")+'" data-cat="'+esc(c)+'">'+esc(c)+"</button>"}).join("")}
-function loadHome(){api("/api/products").then(function(d){keep(d.products);$("featured").innerHTML=d.products.length?d.products.slice(0,6).map(card).join(""):'<div class="empty" style="grid-column:1/-1">No products yet.</div>'}).catch(fail)}
-function renderSearch(){chips($("searchcats"));clearTimeout(st);st=setTimeout(doSearch,220)}
-function doSearch(){var q=$("q").value.trim();api("/api/products?category="+encodeURIComponent(cat)+"&q="+encodeURIComponent(q)).then(function(d){keep(d.products);$("results").innerHTML=d.products.length?d.products.map(card).join(""):'<div class="empty" style="grid-column:1/-1">No products found.</div>';var s=$("sug");if(q&&d.products.length){s.style.display="block";s.innerHTML=d.products.slice(0,4).map(function(p){return '<button data-sug="'+esc(p.title)+'">'+esc(p.title)+"</button>"}).join("")}else s.style.display="none"}).catch(fail)}
+var DEMO_PRODUCTS=[
+{id:"dp1",title:"Peace Lily Plant",category:"Indoor Plants",pricePaise:29900,mrpPaise:39900,stock:20},
+{id:"dp2",title:"Areca Palm",category:"Indoor Plants",pricePaise:44900,mrpPaise:54900,stock:15},
+{id:"dp3",title:"Rose Flower Plant",category:"Flowering Plants",pricePaise:19900,mrpPaise:24900,stock:25},
+{id:"dp4",title:"Marigold Flower Seeds",category:"Flower Seeds",pricePaise:4900,mrpPaise:7900,stock:50},
+{id:"dp5",title:"Sunflower Seeds Pack",category:"Seeds",pricePaise:5900,mrpPaise:8900,stock:40},
+{id:"dp6",title:"Tomato Seeds",category:"Vegetable Seeds",pricePaise:3900,mrpPaise:5900,stock:60},
+{id:"dp7",title:"Lemon Plant",category:"Fruit Plants",pricePaise:34900,mrpPaise:44900,stock:12},
+{id:"dp8",title:"Jade Succulent",category:"Succulents",pricePaise:14900,mrpPaise:19900,stock:18},
+{id:"dp9",title:"Fresh Seasonal Flowers",category:"Flowers",pricePaise:19900,mrpPaise:24900,stock:30},
+{id:"dp10",title:"Vermicompost 2 kg",category:"Manures",pricePaise:12900,mrpPaise:15900,stock:35},
+{id:"dp11",title:"Organic Cow Manure 5 kg",category:"Organic Manure",pricePaise:17900,mrpPaise:22900,stock:28},
+{id:"dp12",title:"Organic Plant Fertilizer",category:"Fertilizers",pricePaise:9900,mrpPaise:12900,stock:32},
+{id:"dp13",title:"Premium Potting Mix",category:"Potting Mix",pricePaise:14900,mrpPaise:18900,stock:24},
+{id:"dp14",title:"Garden Soil 5 kg",category:"Soil",pricePaise:8900,mrpPaise:11900,stock:40},
+{id:"dp15",title:"Ceramic Plant Pot",category:"Pots & Planters",pricePaise:22900,mrpPaise:29900,stock:16},
+{id:"dp16",title:"Hand Gardening Tool Set",category:"Gardening Tools",pricePaise:29900,mrpPaise:39900,stock:14}
+];
+function loadHome(){keep(DEMO_PRODUCTS);$("featured").innerHTML=DEMO_PRODUCTS.slice(0,8).map(card).join("")}
+function renderSearch(){chips($("searchcats"));clearTimeout(st);st=setTimeout(doSearch,120)}
+function doSearch(){
+var q=$("q").value.trim().toLowerCase();
+var list=DEMO_PRODUCTS.filter(function(p){
+var mc=cat==="All"||p.category===cat||(cat==="Soil & Fertilizers"&&["Soil","Fertilizers","Potting Mix","Manures","Organic Manure"].indexOf(p.category)>=0);
+return mc&&(!q||(p.title+" "+p.category).toLowerCase().indexOf(q)>=0)
+});
+keep(list);
+$("results").innerHTML=list.length?list.map(card).join(""):'<div class="empty" style="grid-column:1/-1">No products found.</div>';
+var sug=$("sug");
+if(q&&list.length){sug.style.display="block";sug.innerHTML=list.slice(0,4).map(function(p){return '<button data-sug="'+esc(p.title)+'">'+esc(p.title)+'</button>'}).join("")}
+else sug.style.display="none"
+}
 function cartCount(){return Object.keys(cart).reduce(function(a,k){return a+cart[k]},0)}
 function renderCart(){var ids=Object.keys(cart),t=0;
   $("cartbox").innerHTML=ids.length?ids.map(function(i){var p=ALL[i];if(!p)return"";t+=p.pricePaise*cart[i];return '<div class="row"><div>'+esc(p.title)+'<div class="ps">'+rs(p.pricePaise)+'</div></div><div class="qty"><button data-q="'+esc(i)+'" data-d="-1">\u2212</button>'+cart[i]+'<button data-q="'+esc(i)+'" data-d="1">+</button></div></div>'}).join("")+'<div class="row" style="border:0"><b>Total</b><b class="price">'+rs(t)+"</b></div>":'<div class="empty">Your cart is empty.</div>';
@@ -370,14 +403,25 @@ function go(v){
   if(v==="cart")renderCart();if(v==="search")renderSearch();if(v==="account")paintAcc();if(v==="support"){tchips();loadTk().catch(function(){})}
   moveInd()}
 function showGate(){$("gate").style.display=user?"none":"flex"}
-function mask(u){return u.email?u.email:"+91 "+u.mobile.slice(0,2)+"XXXXXX"+u.mobile.slice(-2)}
-function paintAcc(){if(!user)return;$("logout").style.display="block";$("av").textContent=(user.email?user.email[0]:"P").toUpperCase();$("un").textContent=user.email?user.email.split("@")[0]:"PAUDIVA member";$("uid").textContent=mask(user)+(user.role!=="BUYER"?" \u00b7 "+user.role:"");$("s-cart").textContent=cartCount();
-  api("/api/orders").then(function(d){$("s-orders").textContent=d.orders.length}).catch(function(){})}
+function mask(u){
+if(u.email)return u.email;
+var n=String(u.mobile||"");
+return n.length>4?n.slice(0,2)+"XXXX"+n.slice(-2):n
+}
+function paintAcc(){
+if(!user)return;
+$("logout").style.display="block";
+$("av").textContent=(user.email?user.email[0]:String(user.mobile||"P")[0]).toUpperCase();
+$("un").textContent=user.email?user.email.split("@")[0]:"PAUDIVA member";
+$("uid").textContent=mask(user)+" · DEMO";
+$("s-cart").textContent=cartCount();
+$("s-orders").textContent="0"
+}
 function openT(){$("tmodal").classList.add("on")}
 function closeT(){$("tmodal").classList.remove("on")}
 function step(n){$("g1").style.display=n===1?"block":"none";$("g2").style.display=n===2?"block":"none"}
 function cool(){var s=30,b=$("resend");b.disabled=true;clearInterval(cd);b.textContent="Resend OTP in 30s";cd=setInterval(function(){s--;b.textContent=s>0?"Resend OTP in "+s+"s":"Resend OTP";if(s<=0){clearInterval(cd);b.disabled=false}},1000)}
-function sendOtp(again){return api("/api/auth/request-otp",{method:"POST",body:{mode:mode,value:val}}).then(function(d){$("sent").textContent="We sent a 6-digit code to "+(mode==="mobile"?"+91 "+val:val);if(!again)step(2);cool();$("code").value="";if(d.devCode)toast("Test OTP: "+d.devCode);else if(again)toast("OTP sent again")}).catch(fail)}
+function sendOtp(again){$("sent").textContent="Demo verification for "+val+". Enter any 6 digits to continue.";if(!again)step(2);cool();$("code").value="";if(again)toast("Demo OTP ready — any 6 digits work")}
 /* tickets */
 function tchips(){var e=$("tcats");e.innerHTML="";TC.forEach(function(c){var b=document.createElement("button");b.className="cat glass"+(c===tcat?" on":"");b.textContent=c;b.onclick=function(){tcat=c;tchips()};e.appendChild(b)})}
 function drawTk(){var e=$("tlist");e.innerHTML="";if(!tks.length){e.innerHTML='<div class="empty">No tickets yet.</div>';return}
@@ -410,8 +454,7 @@ $("checkout").onclick=function(){var ids=Object.keys(cart);if(!ids.length)return
   $("checkout").disabled=true;
   api("/api/orders",{method:"POST",body:b}).then(function(d){cart={};renderCart();toast("Order placed: "+d.code);$("oid").value=d.code;go("track");trackOrder()}).catch(fail).then(function(){$("checkout").disabled=false})};
 document.querySelectorAll(".seg button").forEach(function(b){b.onclick=function(){mode=b.dataset.m;document.querySelectorAll(".seg button").forEach(function(x){x.classList.toggle("on",x===b)});$("pre").style.display=mode==="mobile"?"inline":"none";$("ident").value="";$("ident").inputMode=mode==="mobile"?"numeric":"email";$("ident").placeholder=mode==="mobile"?"10-digit mobile number":"you@example.com"}});
-$("otp").onclick=function(){val=$("ident").value.trim().toLowerCase();var okv=mode==="mobile"?/^[6-9][0-9]{9}$/.test(val):/^[^@ ]+@[^@ ]+\.[^@ ]+$/.test(val);
-  if(!okv)return toast(mode==="mobile"?"Enter a valid 10-digit mobile":"Enter a valid email");if(!$("agree").checked)return toast("Please accept the Terms");sendOtp(false)};
+$("otp").onclick=function(){val=$("ident").value.trim().toLowerCase();if(val.length<2)return toast("Enter any mobile number or email");if(!$("agree").checked)return toast("Please accept the Terms");sendOtp(false)};
 $("demoLogin").onclick=function(){
   var n=$("ident").value.trim();
   if(!/^\d{10}$/.test(n))return toast("Enter any 10-digit demo number");
@@ -423,9 +466,8 @@ $("demoLogin").onclick=function(){
 };
 $("resend").onclick=function(){sendOtp(true)};
 $("change").onclick=function(){clearInterval(cd);step(1)};
-$("verify").onclick=function(){if(!/^[0-9]{6}$/.test($("code").value))return toast("Enter the 6-digit OTP");
-  api("/api/auth/verify-otp",{method:"POST",body:{mode:mode,value:val,code:$("code").value}}).then(function(d){user=d.user;showGate();paintAcc();go("home");toast("Welcome to PAUDIVA");loadTk().catch(function(){})}).catch(fail)};
-$("logout").onclick=function(){api("/api/auth/logout",{method:"POST"}).catch(function(){}).then(function(){user=null;sessionStorage.removeItem("paudiva_demo_user");tks=[];seen={};cur=null;step(1);$("ident").value="";$("agree").checked=false;showGate();go("home")})};
+$("verify").onclick=function(){if(!/^[0-9]{6}$/.test($("code").value.trim()))return toast("Enter any 6 digits");user={mobile:mode==="mobile"?val:null,email:mode==="email"?val:null,role:"BUYER",demo:true};sessionStorage.setItem("paudiva_demo_user",JSON.stringify(user));showGate();paintAcc();go("home");toast("Welcome to PAUDIVA demo")};
+$("logout").onclick=function(){user=null;sessionStorage.removeItem("paudiva_demo_user");tks=[];seen={};cur=null;step(1);$("ident").value="";$("agree").checked=false;showGate();go("home")};
 $("tlink").onclick=openT;$("tclose").onclick=closeT;
 $("tagree").onclick=function(){$("agree").checked=true;closeT()};
 $("tfull").onclick=function(){closeT();if(user)go("terms");else toast("Login to read the full terms")};
@@ -436,7 +478,7 @@ $("ksend").onclick=sendMsg;$("kin").addEventListener("keydown",function(e){if(e.
 $("kback").onclick=function(){go("support")};
 $("aclose").onclick=function(){$("amodal").classList.remove("on")};
 $("aopen").onclick=function(){$("amodal").classList.remove("on");if(popId)openTk(popId)};
-setInterval(function(){if(!user||document.hidden)return;loadTk().catch(function(){});if(cur&&$("ticket").classList.contains("on"))loadChat()},4000);
+setInterval(function(){if(!user||user.demo||document.hidden)return;loadTk().catch(function(){});if(cur&&$("ticket").classList.contains("on"))loadChat()},4000);
 /* nav drag */
 (function(){var n=$("nav"),i=$("ind"),btns=[].slice.call(n.querySelectorAll("button")),drag=false,moved=false,sx=0;
   function pick(x){var r=n.getBoundingClientRect(),px=x-r.left,best=null,bd=1e9;btns.forEach(function(b){var d=Math.abs(b.offsetLeft+b.offsetWidth/2-px);if(d<bd){bd=d;best=b}});return best}
@@ -447,13 +489,8 @@ setInterval(function(){if(!user||document.hidden)return;loadTk().catch(function(
 window.addEventListener("load",moveInd);window.addEventListener("resize",moveInd);setTimeout(moveInd,50);
 /* start */
 chips($("homecats"));loadHome();renderCart();
-api("/api/me").then(function(d){
-  user=d.user||JSON.parse(sessionStorage.getItem("paudiva_demo_user")||"null");
-  showGate();if(user){paintAcc();if(!user.demo)loadTk().catch(function(){})}
-}).catch(function(){
-  user=JSON.parse(sessionStorage.getItem("paudiva_demo_user")||"null");
-  showGate();if(user)paintAcc()
-});
+user=JSON.parse(sessionStorage.getItem("paudiva_demo_user")||"null");
+showGate();if(user)paintAcc();
 var h=location.hash.slice(1);if(h&&$(h)&&$(h).classList.contains("view")&&h!=="ticket")go(h);
 </script>
 </body>
