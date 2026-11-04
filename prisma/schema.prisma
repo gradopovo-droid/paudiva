@@ -1,0 +1,173 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  BUYER
+  SELLER
+  SUPPORT
+  ADMIN
+}
+
+enum OrderStatus {
+  PLACED
+  CONFIRMED
+  PACKED
+  OUT_FOR_DELIVERY
+  DELIVERED
+  CANCELLED
+}
+
+enum PaymentMethod {
+  COD
+  UPI
+  CARD
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+  REFUNDED
+}
+
+enum TicketStatus {
+  WAITING
+  AGENT_CONNECTED
+  RESOLVED
+}
+
+enum SenderType {
+  CUSTOMER
+  AGENT
+  SYSTEM
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String?  @unique
+  mobile    String?  @unique
+  role      Role     @default(BUYER)
+  suspended Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  sessions  Session[]
+  orders    Order[]
+  tickets   Ticket[]
+}
+
+model OtpCode {
+  id         String   @id @default(cuid())
+  identifier String
+  codeHash   String
+  expiresAt  DateTime
+  attempts   Int      @default(0)
+  consumed   Boolean  @default(false)
+  createdAt  DateTime @default(now())
+
+  @@index([identifier, createdAt])
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  tokenHash String   @unique
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}
+
+model Category {
+  id       String    @id @default(cuid())
+  name     String    @unique
+  slug     String    @unique
+  products Product[]
+}
+
+model Product {
+  id          String      @id @default(cuid())
+  title       String
+  description String?     @db.Text
+  pricePaise  Int
+  mrpPaise    Int
+  stock       Int         @default(0)
+  active      Boolean     @default(true)
+  isDemo      Boolean     @default(false)
+  categoryId  String
+  category    Category    @relation(fields: [categoryId], references: [id])
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  orderItems  OrderItem[]
+
+  @@index([categoryId])
+  @@index([active, createdAt])
+}
+
+model Order {
+  id            String        @id @default(cuid())
+  code          String        @unique
+  userId        String
+  user          User          @relation(fields: [userId], references: [id])
+  status        OrderStatus   @default(PLACED)
+  paymentMethod PaymentMethod @default(COD)
+  paymentStatus PaymentStatus @default(PENDING)
+  totalPaise    Int
+  buyerName     String
+  deliveryMobile String
+  address       String        @db.Text
+  pincode       String
+  items         OrderItem[]
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  @@index([userId, createdAt])
+}
+
+model OrderItem {
+  id        String  @id @default(cuid())
+  orderId   String
+  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+  title     String
+  unitPaise Int
+  quantity  Int
+
+  @@index([orderId])
+  @@index([productId])
+}
+
+model Ticket {
+  id        String          @id @default(cuid())
+  code      String          @unique
+  userId    String
+  user      User            @relation(fields: [userId], references: [id])
+  category  String
+  orderCode String?
+  status    TicketStatus    @default(WAITING)
+  agentName String?
+  messages  TicketMessage[]
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+
+  @@index([userId, createdAt])
+  @@index([status])
+}
+
+model TicketMessage {
+  id        String     @id @default(cuid())
+  ticketId  String
+  ticket    Ticket     @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  sender    SenderType
+  body      String     @db.Text
+  createdAt DateTime   @default(now())
+
+  @@index([ticketId, createdAt])
+}

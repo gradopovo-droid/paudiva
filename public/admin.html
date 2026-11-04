@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PAUDIVA Support Desk</title>
+<style>
+*{box-sizing:border-box}body{font-family:-apple-system,Segoe UI,Roboto,sans-serif;max-width:720px;margin:0 auto;padding:16px;background:#fff;color:#1d2b22}
+h2{color:#2f6b45}.card{border:1px solid #dfe9dc;border-radius:16px;padding:12px 14px;margin:10px 0;cursor:pointer;background:#f7faf5}
+.bd{float:right;font-size:11px;font-weight:700;padding:3px 9px;border-radius:99px;background:#e1f0cc;color:#2f6b45}
+.msg{max-width:80%;padding:9px 12px;border-radius:16px;margin:6px 0;font-size:14px;white-space:pre-wrap}.CUSTOMER{background:#eef5e8}.AGENT{background:#2f6b45;color:#fff;margin-left:auto}.SYSTEM{background:#f1f1f1;font-size:12px;margin:6px auto;text-align:center}
+input,button{font:inherit;padding:10px 12px;border-radius:12px;border:1px solid #cfdccb}button{background:#2f6b45;color:#fff;border:0;cursor:pointer}
+.row{display:flex;gap:8px;margin-top:10px}.row input{flex:1}.muted{color:#66756b;font-size:13px}
+</style>
+</head>
+<body>
+<h2>PAUDIVA Support Desk</h2>
+<p class="muted" id="who">Checking login…</p>
+<div id="app" style="display:none">
+  <div id="list"></div>
+  <div id="chatbox" style="display:none">
+    <button id="back" style="background:#dfe9dc;color:#2f6b45">‹ All tickets</button>
+    <h3 id="ttl"></h3><div id="msgs"></div>
+    <div class="row"><input id="reply" placeholder="Type a reply"><button id="send">Send</button></div>
+    <div class="row"><button id="resolve" style="background:#b3402f">Mark resolved</button></div>
+  </div>
+  <div id="adm" style="display:none;margin-top:24px;border-top:1px solid #dfe9dc;padding-top:12px">
+    <b>Admin tools</b>
+    <div class="row"><input id="semail" placeholder="New support worker email"><button id="sadd">Add</button></div>
+    <div class="row"><button id="seed">Load demo products</button></div>
+  </div>
+</div>
+<script>
+var cur=null,$=function(i){return document.getElementById(i)};
+function api(p,o){o=o||{};var x={method:o.method||'GET',credentials:'same-origin',headers:{'Content-Type':'application/json'}};if(o.body)x.body=JSON.stringify(o.body);
+  return fetch(p,x).then(function(r){return r.json().catch(function(){return{}}).then(function(j){if(!r.ok)throw new Error(j.error||'Error');return j})})}
+function list(){api('/api/admin/tickets').then(function(d){var e=$('list');e.innerHTML='';if(!d.tickets.length){e.textContent='No tickets yet.';return}
+  d.tickets.forEach(function(t){var c=document.createElement('div');c.className='card';var b=document.createElement('span');b.className='bd';b.textContent=t.status;var n=document.createElement('b');n.textContent=t.code+' · '+t.category;var p=document.createElement('div');p.className='muted';p.textContent=t.preview;c.appendChild(b);c.appendChild(n);c.appendChild(p);c.onclick=function(){open(t.code)};e.appendChild(c)})}).catch(function(e){$('who').textContent=e.message})}
+function open(code){cur=code;$('list').style.display='none';$('chatbox').style.display='block';load()}
+function load(){if(!cur)return;api('/api/tickets/'+cur).then(function(t){$('ttl').textContent=t.code+' · '+t.category+(t.orderCode?' · Order '+t.orderCode:'');var m=$('msgs');m.innerHTML='';t.messages.forEach(function(x){var d=document.createElement('div');d.className='msg '+x.sender;d.textContent=x.body;m.appendChild(d)})})}
+$('back').onclick=function(){cur=null;$('chatbox').style.display='none';$('list').style.display='block';list()};
+$('send').onclick=function(){var b=$('reply').value.trim();if(!b||!cur)return;$('reply').value='';api('/api/tickets/'+cur+'/messages',{method:'POST',body:{body:b}}).then(load).catch(function(e){alert(e.message)})};
+$('resolve').onclick=function(){if(cur)api('/api/admin/tickets/'+cur+'/resolve',{method:'POST'}).then(function(){alert('Resolved');$('back').onclick()}).catch(function(e){alert(e.message)})};
+$('sadd').onclick=function(){api('/api/admin/support',{method:'POST',body:{email:$('semail').value}}).then(function(){alert('Support worker added. They log in with an email OTP.');$('semail').value=''}).catch(function(e){alert(e.message)})};
+$('seed').onclick=function(){api('/api/admin/seed',{method:'POST'}).then(function(r){alert('Done. New demo products: '+r.products)}).catch(function(e){alert(e.message)})};
+api('/api/me').then(function(d){var u=d.user;if(!u||(u.role!=='ADMIN'&&u.role!=='SUPPORT')){$('who').textContent='Staff only. Log in on the main site with a staff email, then reopen this page.';return}
+  $('who').textContent='Logged in as '+(u.email||u.mobile)+' ('+u.role+')';$('app').style.display='block';if(u.role==='ADMIN')$('adm').style.display='block';list();setInterval(function(){if(cur)load();else list()},5000)});
+</script>
+</body>
+</html>

@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>PAUDIVA – Grow Green. Live Better.</title>
+<style>
+:root{--bg:#f7f3e8;--card:rgba(255,255,255,.62);--line:rgba(255,255,255,.8);--ink:#1d2b22;--mute:#66756b;--g:#2f6b45;--g2:#4f8f63;--sage:#dfe9dc;--lime:#a8d36b;--sh:0 8px 30px rgba(35,70,50,.10);--top:env(safe-area-inset-top,0px);--bot:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#f7f3e8}}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none}
+html,body{height:100%}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);padding-top:var(--top);overscroll-behavior:none}
+body::before{content:"";position:fixed;inset:0;z-index:-1;background:radial-gradient(60% 40% at 90% 0,#dbe9d0 0,transparent 70%),radial-gradient(50% 35% at 0 30%,#fff 0,transparent 70%),var(--bg)}
+button,input{font:inherit;color:inherit;border:0;background:none;outline:none}
+button{cursor:pointer;user-select:none;-webkit-user-select:none;transition:transform .15s ease,opacity .15s ease}
+button:active{transform:scale(.97);opacity:.85}
+.glass{background:var(--card);backdrop-filter:blur(22px) saturate(160%);-webkit-backdrop-filter:blur(22px) saturate(160%);border:1px solid var(--line);box-shadow:var(--sh)}
+.wrap{max-width:720px;margin:0 auto;padding:0 16px calc(96px + var(--bot))}
+.ann{font-size:12px;text-align:center;padding:7px;background:var(--g);color:#f4f8ef;letter-spacing:.2px}
+header{position:sticky;top:var(--top);z-index:20;margin:10px 12px 0;border-radius:20px;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;max-width:720px;margin-inline:auto;width:calc(100% - 24px)}
+.logo{font-weight:800;letter-spacing:2.5px;color:var(--g);font-size:18px;display:flex;align-items:center;gap:8px}
+.logo svg{width:26px;height:26px}
+.sub{font-size:10px;color:var(--mute);letter-spacing:.4px;font-weight:500}
+.pill{border-radius:999px;padding:8px 14px;font-size:13px;font-weight:600;background:var(--g);color:#fff}
+.view{display:none;animation:in .25s ease}
+.view.on{display:block}
+@keyframes in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+h2{font-size:18px;margin:22px 0 10px;font-weight:700}
+.hero{margin-top:14px;border-radius:26px;padding:26px 22px;background:linear-gradient(135deg,#2f6b45,#5a9a6c);color:#fff;position:relative;overflow:hidden}
+.hero h1{font-size:28px;line-height:1.15;font-weight:800}
+.hero p{margin:10px 0 18px;font-size:14px;opacity:.9;max-width:260px}
+.hero .btn{background:#fffaf0;color:var(--g);border-radius:999px;padding:11px 20px;font-weight:700;font-size:14px}
+.hero svg{position:absolute;right:-10px;bottom:-14px;width:150px;opacity:.25}
+.cats{display:flex;gap:10px;overflow-x:auto;padding:2px 2px 8px;scrollbar-width:none}
+.cats::-webkit-scrollbar{display:none}
+.cat{flex:0 0 auto;border-radius:16px;padding:10px 16px;font-size:13px;font-weight:600;color:var(--g)}
+.cat.on{background:var(--g);color:#fff}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(min-width:600px){.grid{grid-template-columns:repeat(3,1fr)}}
+.p{border-radius:20px;overflow:hidden;display:flex;flex-direction:column}
+.img{aspect-ratio:1/1;display:grid;place-items:center;background:linear-gradient(160deg,var(--sage),#f3efdc)}
+.img svg{width:46%;color:var(--g2)}
+.pb{padding:10px 12px 12px}
+.pn{font-size:14px;font-weight:600;line-height:1.25}
+.ps{font-size:11px;color:var(--mute);margin-top:3px}
+.pr{display:flex;align-items:center;justify-content:space-between;margin-top:8px}
+.price{font-weight:800;color:var(--g)}
+.price s{font-weight:400;color:var(--mute);font-size:11px;margin-left:4px}
+.add{width:32px;height:32px;border-radius:50%;background:var(--g);color:#fff;font-size:18px;line-height:1}
+.why{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.why div{border-radius:18px;padding:14px;font-size:13px}
+.why b{display:block;color:var(--g);margin-bottom:3px}
+.sell{margin-top:20px;border-radius:22px;padding:20px;background:var(--sage)}
+.sell h3{color:var(--g)}
+.sell p{font-size:13px;color:var(--mute);margin:6px 0 12px}
+.empty{padding:34px 10px;text-align:center;color:var(--mute);font-size:14px}
+.row{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid rgba(47,107,69,.1);font-size:14px}
+.qty{display:flex;gap:10px;align-items:center}
+.qty button{width:28px;height:28px;border-radius:50%;background:var(--sage);color:var(--g);font-weight:700}
+.field{display:flex;gap:8px;align-items:center;border-radius:16px;padding:12px 14px;margin-top:10px}
+.field input{flex:1;font-size:15px}
+.big{width:100%;margin-top:14px;padding:14px;border-radius:16px;background:var(--g);color:#fff;font-weight:700}
+.tl{margin:18px 4px 0;padding-left:22px;border-left:2px solid rgba(47,107,69,.2)}
+.st{position:relative;padding:0 0 22px 10px;font-size:14px;color:var(--mute)}
+.st::before{content:"";position:absolute;left:-30px;top:2px;width:14px;height:14px;border-radius:50%;background:#e9e5d5;border:2px solid var(--bg)}
+.st.done{color:var(--ink);font-weight:600}
+.st.done::before{background:var(--g)}
+.st small{display:block;font-weight:400;color:var(--mute);font-size:12px}
+.sug{margin-top:10px;border-radius:16px;overflow:hidden}
+.sug button{display:block;width:100%;text-align:left;padding:12px 14px;font-size:14px;border-bottom:1px solid rgba(47,107,69,.08)}
+.legal{font-size:13.5px;line-height:1.65;color:#33433a}
+.legal h3{margin:18px 0 6px;color:var(--g);font-size:15px}
+.legal .note{margin-top:16px;font-size:12px;color:var(--mute)}
+footer{text-align:center;font-size:12px;color:var(--mute);margin-top:28px;line-height:1.8}
+footer a{color:var(--g);font-weight:600;margin:0 6px;cursor:pointer}
+nav{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(10px + var(--bot));width:calc(100% - 24px);max-width:460px;z-index:30;border-radius:26px;display:flex;justify-content:space-around;padding:8px 6px}
+nav button{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:10.5px;font-weight:600;color:var(--mute);padding:6px 0;border-radius:18px;position:relative}
+nav button svg{width:22px;height:22px}
+nav button.on{color:var(--g);background:rgba(168,211,107,.28)}
+.dot{position:absolute;top:2px;right:24%;background:var(--g);color:#fff;font-size:9px;border-radius:9px;padding:1px 5px;display:none}
+.toast{position:fixed;left:50%;top:calc(var(--top) + 70px);transform:translateX(-50%);padding:10px 16px;border-radius:999px;font-size:13px;font-weight:600;color:var(--g);z-index:40;opacity:0;pointer-events:none;transition:opacity .2s}
+.toast.on{opacity:1}
+.gate{position:fixed;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;padding:20px;background:linear-gradient(160deg,#eef5e8,#f7f3e8 60%,#fff)}
+.gcard{width:100%;max-width:400px;border-radius:28px;padding:26px 22px}
+.gcard h3{margin:18px 0 4px;font-size:20px}.gcard p{font-size:13px;color:var(--mute)}
+.seg{display:flex;border-radius:14px;padding:4px;margin-top:14px}.seg button{flex:1;padding:9px;border-radius:11px;font-size:13px;font-weight:600;color:var(--mute)}.seg button.on{background:var(--g);color:#fff}
+.agree{display:flex;gap:8px;align-items:flex-start;font-size:12.5px;margin-top:14px;color:var(--mute)}.agree a{color:var(--g);font-weight:600;text-decoration:underline;cursor:pointer}.agree input{accent-color:var(--g);margin-top:2px}
+.link{color:var(--g);font-weight:600;font-size:13px;margin-top:12px;display:block;text-align:center}
+.modal{position:fixed;inset:0;z-index:70;background:rgba(20,40,28,.35);display:none;align-items:flex-end;justify-content:center;padding:12px}
+.modal.on{display:flex}
+.sheet{width:100%;max-width:420px;border-radius:26px;padding:20px;background:rgba(255,252,243,.94);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);max-height:75vh;overflow:auto}
+.sheet h3{color:var(--g)}.sheet ul{margin:10px 0 14px 18px;font-size:13.5px;line-height:1.6}
+.two{display:flex;gap:10px}.two button{flex:1;padding:12px;border-radius:14px;font-weight:700}
+.ghost{background:var(--sage);color:var(--g)}.pri{background:var(--g);color:#fff}
+.prof{display:flex;gap:14px;align-items:center;border-radius:24px;padding:18px;margin-top:6px}
+.av{flex:0 0 58px;height:58px;border-radius:50%;background:linear-gradient(135deg,var(--g),var(--lime));color:#fff;display:grid;place-items:center;font-size:24px;font-weight:800}
+.bd{display:inline-block;font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px;background:rgba(168,211,107,.35);color:var(--g);margin:6px 6px 0 0}
+.bd.n{background:#ece8d8;color:var(--mute)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}.stats div{border-radius:18px;padding:12px;text-align:center;font-size:11px;color:var(--mute)}.stats b{display:block;font-size:20px;color:var(--g)}
+.logout{width:100%;margin-top:14px;padding:13px;border-radius:16px;background:#fff;color:#b3402f;font-weight:700;border:1px solid rgba(179,64,47,.2)}
+.glass{background:linear-gradient(145deg,rgba(255,255,255,.74),rgba(255,255,255,.38));backdrop-filter:blur(24px) saturate(180%) brightness(1.04);-webkit-backdrop-filter:blur(24px) saturate(180%) brightness(1.04);border:1px solid rgba(255,255,255,.85);box-shadow:inset 0 1px 1px rgba(255,255,255,.95),inset 0 -1px 2px rgba(47,107,69,.08),0 10px 30px rgba(35,70,50,.12)}
+nav.glass{border-radius:999px;padding:6px;max-width:440px;box-shadow:inset 0 1px 2px #fff,inset 0 -2px 6px rgba(47,107,69,.10),0 14px 36px rgba(35,70,50,.20)}
+nav button{position:relative;z-index:1;border-radius:999px;transition:color .3s ease,transform .15s ease}
+nav button.on{background:none;color:var(--g)}
+nav button svg{transition:transform .4s cubic-bezier(.3,1.25,.4,1)}
+nav button.on svg{transform:translateY(-1px) scale(1.1)}
+nav .ind{position:absolute;top:6px;bottom:6px;left:0;width:0;border-radius:999px;pointer-events:none;z-index:0;background:radial-gradient(120% 90% at 30% 10%,rgba(255,255,255,.98),rgba(255,255,255,.55) 45%,rgba(168,211,107,.50));box-shadow:inset 0 1.5px 2px #fff,inset 0 -4px 8px rgba(79,143,99,.28),0 6px 16px rgba(47,107,69,.22);transition:transform .5s cubic-bezier(.3,1.25,.4,1),width .5s cubic-bezier(.3,1.25,.4,1)}
+.hero{box-shadow:inset 0 1px 2px rgba(255,255,255,.5),0 16px 36px rgba(47,107,69,.28)}
+.add{box-shadow:inset 0 1px 2px rgba(255,255,255,.5),0 4px 10px rgba(47,107,69,.3)}
+.big,.pill{box-shadow:inset 0 1px 2px rgba(255,255,255,.45),0 6px 16px rgba(47,107,69,.28)}
+body::before{background:radial-gradient(55% 38% at 92% 2%,rgba(168,211,107,.55),transparent 70%),radial-gradient(50% 36% at 0 22%,rgba(79,143,99,.28),transparent 70%),radial-gradient(60% 40% at 80% 62%,rgba(223,233,220,.9),transparent 70%),radial-gradient(50% 35% at 5% 90%,rgba(168,211,107,.35),transparent 70%),var(--bg)}
+html{scroll-behavior:smooth}
+.ann{background:linear-gradient(90deg,#2f6b45,#4f8f63);box-shadow:inset 0 -1px 2px rgba(0,0,0,.12)}
+.hero{background:radial-gradient(90% 70% at 15% 0,rgba(255,255,255,.28),transparent 60%),linear-gradient(135deg,#2a6142,#5a9a6c 60%,#8fc27a);border:1px solid rgba(255,255,255,.45)}
+.hero::before{content:"";position:absolute;left:0;right:0;top:0;height:46%;background:linear-gradient(180deg,rgba(255,255,255,.28),rgba(255,255,255,0));border-radius:26px 26px 60% 60%/26px 26px 40px 40px;pointer-events:none}
+.hero .btn{background:linear-gradient(160deg,#fff,#eef5e4);box-shadow:inset 0 1px 2px #fff,0 6px 14px rgba(0,0,0,.15)}
+.big,.pill,.pri{background:radial-gradient(120% 100% at 30% 0,rgba(255,255,255,.35),transparent 55%),linear-gradient(160deg,#4f8f63,#2f6b45)}
+.cat{border-radius:999px;padding:9px 16px}
+.cat.on{background:radial-gradient(120% 100% at 30% 0,rgba(255,255,255,.35),transparent 55%),linear-gradient(160deg,#4f8f63,#2f6b45);color:#fff;border-color:rgba(255,255,255,.4)}
+.p{position:relative}
+.p::after{content:"";position:absolute;left:0;right:0;top:0;height:38%;background:linear-gradient(180deg,rgba(255,255,255,.35),rgba(255,255,255,0));pointer-events:none;border-radius:20px 20px 50% 50%/20px 20px 24px 24px}
+.img{background:radial-gradient(80% 70% at 30% 15%,rgba(255,255,255,.8),transparent 60%),linear-gradient(160deg,rgba(168,211,107,.35),rgba(223,233,220,.7))}
+.img svg{width:42%;padding:16px;box-sizing:content-box;border-radius:50%;background:linear-gradient(145deg,rgba(255,255,255,.75),rgba(255,255,255,.3));box-shadow:inset 0 1px 2px #fff,0 8px 20px rgba(47,107,69,.18)}
+.sell{background:radial-gradient(100% 80% at 20% 0,rgba(255,255,255,.7),transparent 60%),linear-gradient(145deg,rgba(168,211,107,.35),rgba(223,233,220,.7));border:1px solid rgba(255,255,255,.85);box-shadow:inset 0 1px 2px #fff,0 10px 26px rgba(35,70,50,.12);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
+.qty button,.ghost{background:linear-gradient(145deg,rgba(255,255,255,.9),rgba(223,233,220,.8));box-shadow:inset 0 1px 2px #fff,0 2px 6px rgba(47,107,69,.15)}
+.st::before{box-shadow:inset 0 1px 1px rgba(255,255,255,.8)}
+.st.done::before{background:radial-gradient(circle at 35% 30%,#bfe38a,#2f6b45);box-shadow:0 0 0 4px rgba(168,211,107,.3)}
+.bd{background:linear-gradient(145deg,rgba(255,255,255,.8),rgba(168,211,107,.4));box-shadow:inset 0 1px 1px #fff}
+.av{box-shadow:inset 0 2px 3px rgba(255,255,255,.6),0 8px 18px rgba(47,107,69,.3)}
+.logout{background:linear-gradient(145deg,rgba(255,255,255,.9),rgba(255,255,255,.6));box-shadow:inset 0 1px 2px #fff,0 6px 16px rgba(179,64,47,.12)}
+.gate{background:radial-gradient(60% 40% at 90% 5%,rgba(168,211,107,.6),transparent 70%),radial-gradient(60% 45% at 5% 95%,rgba(79,143,99,.35),transparent 70%),linear-gradient(160deg,#eef5e8,#f7f3e8 60%,#fff)}
+.sheet{background:linear-gradient(145deg,rgba(255,255,255,.85),rgba(247,243,232,.75));border:1px solid rgba(255,255,255,.9);box-shadow:inset 0 1px 2px #fff,0 20px 50px rgba(20,40,28,.25)}
+.sug button:active{background:rgba(168,211,107,.2)}
+:root{--bg:#ffffff;--sage:#e8f1e4}
+body{background:#fff}
+body::before{background:radial-gradient(55% 36% at 92% 2%,rgba(168,211,107,.22),transparent 70%),radial-gradient(50% 34% at 0 26%,rgba(79,143,99,.09),transparent 70%),radial-gradient(50% 34% at 5% 92%,rgba(168,211,107,.15),transparent 70%),#fff}
+.glass{background:linear-gradient(145deg,rgba(255,255,255,.96),rgba(246,250,244,.78));border:1px solid rgba(47,107,69,.10);box-shadow:inset 0 1px 1px #fff,inset 0 -1px 2px rgba(47,107,69,.06),0 8px 26px rgba(35,70,50,.10)}
+nav.glass{box-shadow:inset 0 1px 2px #fff,inset 0 -2px 6px rgba(47,107,69,.08),0 14px 36px rgba(35,70,50,.18)}
+.gate{background:radial-gradient(60% 40% at 90% 5%,rgba(168,211,107,.4),transparent 70%),radial-gradient(60% 45% at 5% 95%,rgba(79,143,99,.18),transparent 70%),#fff}
+.sheet{background:linear-gradient(145deg,rgba(255,255,255,.97),rgba(246,250,244,.9))}
+.img{background:radial-gradient(80% 70% at 30% 15%,#fff,transparent 60%),linear-gradient(160deg,rgba(168,211,107,.22),rgba(232,241,228,.8))}
+.sell{background:radial-gradient(100% 80% at 20% 0,#fff,transparent 60%),linear-gradient(145deg,rgba(168,211,107,.22),rgba(232,241,228,.8));border:1px solid rgba(47,107,69,.10)}
+.bd.n{background:#eef2ec}
+.st::before{background:#e1e9df}
+.field input::placeholder{color:#8a9a8f}
+header.glass,nav.glass{background:linear-gradient(145deg,rgba(255,255,255,.55),rgba(255,255,255,.16) 55%,rgba(255,255,255,.34));backdrop-filter:blur(30px) saturate(210%) brightness(1.06);-webkit-backdrop-filter:blur(30px) saturate(210%) brightness(1.06);border:1px solid rgba(255,255,255,.75);box-shadow:inset 0 1.5px 1px rgba(255,255,255,.95),inset 0 -2px 6px rgba(255,255,255,.35),inset 0 0 18px rgba(255,255,255,.25),0 10px 30px rgba(35,70,50,.14)}
+header.glass{border-radius:999px;padding:9px 16px}
+nav .ind{background:radial-gradient(120% 90% at 30% 8%,rgba(255,255,255,.95),rgba(255,255,255,.45) 45%,rgba(168,211,107,.45));backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.field textarea{flex:1;font:inherit;font-size:15px;border:0;background:none;outline:none;resize:none;min-height:84px;color:inherit}
+.faq details{padding:13px 0;border-bottom:1px solid rgba(47,107,69,.1)}.faq details:last-child{border:0}
+.faq summary{font-weight:600;font-size:14px;cursor:pointer;list-style:none;display:flex;justify-content:space-between}.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";color:var(--g);font-weight:700}.faq details[open] summary::after{content:"−"}
+.faq p{font-size:13px;color:var(--mute);margin-top:8px;line-height:1.55}
+nav{touch-action:none;will-change:transform;-webkit-user-select:none;user-select:none}
+nav .ind{will-change:transform,width;transition:transform .65s cubic-bezier(.22,1.25,.36,1),width .65s cubic-bezier(.22,1.25,.36,1)}
+nav .ind.drag{transition:none}
+nav button{transition:color .35s ease,transform .25s cubic-bezier(.22,1.25,.36,1)}
+nav button:active{transform:scale(.92);opacity:1}
+nav button svg{transition:transform .55s cubic-bezier(.22,1.25,.36,1)}
+@keyframes in{from{opacity:0;transform:translate3d(0,10px,0)}to{opacity:1;transform:none}}
+.view{animation-duration:.4s;animation-timing-function:cubic-bezier(.22,1,.36,1)}
+.cats,.wrap{-webkit-overflow-scrolling:touch}
+.chat{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+.msg{max-width:82%;padding:10px 13px;border-radius:18px;font-size:14px;line-height:1.4;word-wrap:break-word}
+.msg.me{align-self:flex-end;background:linear-gradient(160deg,#4f8f63,#2f6b45);color:#fff;border-bottom-right-radius:6px}
+.msg.agent{align-self:flex-start;background:linear-gradient(145deg,#fff,#eef5e8);border:1px solid rgba(47,107,69,.1);border-bottom-left-radius:6px;box-shadow:0 3px 10px rgba(35,70,50,.08)}
+.msg.sys{align-self:center;font-size:12px;color:var(--mute);background:rgba(232,241,228,.8);padding:6px 12px}
+.wait{display:flex;align-items:center;gap:6px;border-radius:16px;padding:12px 14px;margin-top:12px;font-size:13px;color:var(--g);font-weight:600}
+.wait i{width:7px;height:7px;border-radius:50%;background:var(--g2);animation:dot 1.2s infinite ease-in-out}.wait i:nth-child(2){animation-delay:.15s}.wait i:nth-child(3){animation-delay:.3s;margin-right:6px}
+@keyframes dot{0%,80%,100%{opacity:.25;transform:scale(.8)}40%{opacity:1;transform:scale(1.15)}}
+.modal.mid{align-items:center}
+.apop{text-align:center}.apop .av{margin:0 auto 12px}
+</style>
+</head>
+<body>
+<div class="ann">Free seller registration · Cash on Delivery available · Made for India</div>
+<header class="glass">
+  <div><div class="logo"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M16 29V15M16 15C16 8 10 4 4 5c0 7 5 11 12 10zM16 19c0-5 4-8 11-8 0 6-4 9-11 8z"/></svg>PAUDIVA</div><div class="sub">Grow Green. Live Better.</div></div>
+  <button class="pill" data-go="seller">Sell</button>
+</header>
+
+<main class="wrap">
+<section class="view on" id="home">
+  <div class="hero"><h1>Bring nature<br>home.</h1><p>Plants, seeds and gardening essentials from trusted local sellers.</p><button class="btn" data-go="search">Shop now</button>
+  <svg viewBox="0 0 32 32" fill="none" stroke="#fff" stroke-width="1.5"><path d="M16 29V15M16 15C16 8 10 4 4 5c0 7 5 11 12 10zM16 19c0-5 4-8 11-8 0 6-4 9-11 8z"/></svg></div>
+  <h2>Shop by category</h2><div class="cats" id="homecats"></div>
+  <h2>Featured products</h2><div class="grid" id="featured"></div>
+  <h2>Why PAUDIVA</h2>
+  <div class="why"><div class="glass"><b>Verified sellers</b>Every seller is reviewed before listing.</div><div class="glass"><b>Pay your way</b>UPI, cards or Cash on Delivery.</div><div class="glass"><b>Track every order</b>Live status from seller to doorstep.</div><div class="glass"><b>Honest reviews</b>Only verified buyers can review.</div></div>
+  <div class="sell"><h3>Become a seller</h3><p>Registration and listing are free. We only earn a small commission when you make a sale.</p><button class="pill" data-go="seller">Start selling</button></div>
+  <footer><div><a data-go="terms">Terms &amp; Conditions</a><a data-go="privacy">Privacy</a><a data-go="refund">Refunds</a><a data-go="support">Support</a></div><div>© 2026 PAUDIVA · Powered By V5</div></footer>
+</section>
+
+<section class="view" id="search">
+  <h2 style="margin-top:18px">Search</h2>
+  <div class="field glass"><input id="q" placeholder="Search plants, seeds, pots…" autocomplete="off"><span style="color:var(--mute)">⌕</span></div>
+  <div class="cats" id="searchcats" style="margin-top:12px"></div>
+  <div class="sug glass" id="sug" style="display:none"></div>
+  <div class="grid" id="results" style="margin-top:12px"></div>
+</section>
+
+<section class="view" id="cart">
+  <h2 style="margin-top:18px">Your cart</h2>
+  <div class="glass" style="border-radius:20px;padding:6px 16px" id="cartbox"></div>
+  <h2>Delivery details</h2>
+  <div class="field glass"><input id="cname" placeholder="Full name" autocomplete="name"></div>
+  <div class="field glass"><input id="cmob" inputmode="numeric" maxlength="10" placeholder="Delivery mobile number" autocomplete="tel-national"></div>
+  <div class="field glass"><textarea id="cadr" placeholder="Full delivery address" style="min-height:64px"></textarea></div>
+  <div class="field glass"><input id="cpin" inputmode="numeric" maxlength="6" placeholder="PIN code" autocomplete="postal-code"></div>
+  <button class="big" id="checkout">Place order (Cash on Delivery)</button>
+  <p class="legal note">Online payments (UPI/cards) go live after payment-provider approval. Orders are marked paid only after server-side verification.</p>
+</section>
+
+<section class="view" id="track">
+  <h2 style="margin-top:18px">Track order</h2>
+  <div class="field glass"><input id="oid" placeholder="Enter order ID (e.g. PD-1234567)"><button class="pill" id="tbtn" style="padding:7px 12px">Track</button></div>
+  <div id="tres"></div>
+</section>
+
+<section class="view" id="account">
+  <h2 style="margin-top:18px">My account</h2>
+  <div class="prof glass"><div class="av" id="av">P</div><div><b id="un" style="font-size:17px"></b><div class="ps" id="uid"></div><span class="bd">✓ Verified</span><span class="bd">Buyer</span><span class="bd n">Seller: not registered</span></div></div>
+  <div class="stats"><div class="glass"><b id="s-orders">0</b>Orders</div><div class="glass"><b>0</b>Wishlist</div><div class="glass"><b id="s-cart">0</b>In cart</div></div>
+  <h2>More</h2>
+  <div class="glass" style="border-radius:20px;padding:4px 16px">
+    <div class="row" data-go="terms" style="cursor:pointer">Terms &amp; Conditions <span>›</span></div>
+    <div class="row" data-go="privacy" style="cursor:pointer">Privacy Policy <span>›</span></div>
+    <div class="row" data-go="refund" style="cursor:pointer">Refund &amp; Cancellation <span>›</span></div>
+    <div class="row" data-go="support" style="cursor:pointer">Help &amp; Support <span>›</span></div>
+    <div class="row" data-go="seller" style="cursor:pointer;border:0">Become a seller <span>›</span></div>
+  </div>
+  <button class="logout" id="logout">Log out</button>
+</section>
+
+<section class="view" id="seller">
+  <h2 style="margin-top:18px">Sell on PAUDIVA</h2>
+  <div class="glass legal" style="border-radius:20px;padding:16px"><h3 style="margin-top:0">How it works</h3>Register free, get verified, list products and manage your own delivery. You receive an instant WhatsApp alert for every new order. PAUDIVA charges a commission only on successful sales, set by admin.</div>
+  <button class="big" data-go="account">Login to register as seller</button>
+</section>
+
+<section class="view" id="support">
+  <h2 style="margin-top:18px">Help &amp; Support</h2>
+  <div class="glass faq" style="border-radius:20px;padding:4px 16px">
+    <details><summary>Where is my order?</summary><p>Open the Track tab and enter your order ID. The seller updates the status as your order is packed and shipped.</p></details>
+    <details><summary>How do I cancel an order?</summary><p>You can cancel before the seller dispatches it. Raise a ticket below with your order ID.</p></details>
+    <details><summary>My plant arrived damaged</summary><p>Raise a Refund ticket with your order ID and photos within the return window. We will review it with the seller.</p></details>
+    <details><summary>When will I get my refund?</summary><p>Approved refunds go back to your original payment method. Cash on Delivery refunds need your bank or UPI details.</p></details>
+  </div>
+  <h2>Raise a ticket</h2>
+  <div class="glass" style="border-radius:20px;padding:14px">
+    <div class="cats" id="tcats"></div>
+    <div class="field glass"><input id="torder" placeholder="Order ID (optional)" autocomplete="off"></div>
+    <div class="field glass"><textarea id="tdesc" placeholder="Describe your issue"></textarea></div>
+    <button class="big" id="tsend">Submit ticket</button>
+    <p class="legal note">Photo attachments arrive in a later update.</p>
+  </div>
+  <h2>My tickets</h2><div id="tlist"></div>
+</section>
+
+<section class="view" id="ticket">
+  <div style="display:flex;align-items:center;gap:10px;margin-top:18px"><button class="ghost" id="kback" style="width:36px;height:36px;border-radius:50%;font-size:20px">‹</button><div><b id="kid">TK</b><div class="ps" id="kmeta"></div></div><span class="bd" id="kst" style="margin-left:auto">Open</span></div>
+  <div class="glass wait" id="kwait"><i></i><i></i><i></i>Waiting for an agent to join…</div>
+  <div class="chat" id="chat"></div>
+  <div class="field glass" style="margin-top:12px"><input id="kin" placeholder="Type a message" autocomplete="off"><button class="pill" id="ksend" style="padding:7px 14px">Send</button></div>
+  <p class="legal note">An agent will join as soon as one is available. You can keep chatting here.</p>
+</section>
+
+<section class="view" id="terms"><div class="legal">
+<h2 style="margin-top:18px">Terms &amp; Conditions</h2>
+<p>Last updated: 3 November 2026. By using PAUDIVA you agree to these terms.</p>
+<h3>1. About PAUDIVA</h3>PAUDIVA is an online marketplace in India connecting buyers with independent sellers of plants, seeds and gardening products. PAUDIVA is not the seller of listed products unless stated.
+<h3>2. Accounts</h3>You log in with a mobile number or email using a one-time password. You are responsible for activity on your account and must provide accurate information.
+<h3>3. Orders and pricing</h3>All prices are in INR and include applicable taxes unless stated. An order is confirmed when the seller accepts it. Sellers may cancel for stock or delivery issues, with a full refund of any prepaid amount.
+<h3>4. Payments</h3>We support UPI, cards and Cash on Delivery. Online payments are confirmed only after verification by our payment provider.
+<h3>5. Delivery</h3>Each seller handles delivery independently. Estimated timelines are shown by the seller. Live plants may vary slightly in size and appearance.
+<h3>6. Cancellations, returns and refunds</h3>Orders can be cancelled before dispatch. Damaged, wrong or dead-on-arrival items can be reported within the window in the Return &amp; Replacement Policy, with photo proof.
+<h3>7. Sellers</h3>Seller registration and listing are free. PAUDIVA earns a commission on successful sales. Sellers must list accurate, lawful products and may be suspended for violations.
+<h3>8. Reviews</h3>Only verified buyers can post reviews. Fake or abusive content is removed.
+<h3>9. Privacy</h3>Buyer delivery details are shared only with the relevant seller and fulfilment parties. See the Privacy Policy.
+<h3>10. Limitation of liability</h3>To the extent permitted by Indian law, PAUDIVA is not liable for indirect losses arising from seller conduct or delivery delays.
+<h3>11. Governing law</h3>These terms are governed by the laws of India. Disputes are subject to the courts of the jurisdiction stated on our Contact page.
+<h3>12. Contact</h3>Questions or complaints: use Support in your account.
+<p class="note">Draft template. Have a qualified lawyer review it before launch.</p>
+<footer><a data-go="home">Back to home</a></footer></div></section>
+
+<section class="view" id="privacy"><div class="legal"><h2 style="margin-top:18px">Privacy Policy</h2>We collect your mobile/email, delivery address and order data to run the marketplace. Delivery details go only to the seller fulfilling your order. We never sell personal data. You can request correction or deletion through Support.<p class="note">Draft. Legal review required.</p></div></section>
+<section class="view" id="refund"><div class="legal"><h2 style="margin-top:18px">Refund &amp; Cancellation</h2>Cancel before dispatch for a full refund. Report damaged or wrong items with photos within the stated window. Refunds go to the original payment method after seller and admin review.<p class="note">Draft. Legal review required.</p></div></section>
+</main>
+
+<nav class="glass" id="nav"><i class="ind" id="ind"></i>
+  <button data-go="home" class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8M5 10v10h14V10"/></svg>Home</button>
+  <button data-go="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>Search</button>
+  <button data-go="cart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h3l2 12h10l2-8H7"/><circle cx="10" cy="20" r="1"/><circle cx="17" cy="20" r="1"/></svg>Cart<span class="dot" id="cnt">0</span></button>
+  <button data-go="track"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7l9-4 9 4-9 4zM3 7v10l9 4 9-4V7M12 11v10"/></svg>Track</button>
+  <button data-go="account"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4-6 8-6s7 2 8 6"/></svg>Account</button>
+</nav>
+<div class="gate" id="gate"><div class="gcard glass">
+  <div class="logo"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M16 29V15M16 15C16 8 10 4 4 5c0 7 5 11 12 10zM16 19c0-5 4-8 11-8 0 6-4 9-11 8z"/></svg>PAUDIVA</div><div class="sub">Grow Green. Live Better.</div>
+  <div id="g1"><h3>Login or create account</h3><p>New here? Your account is created automatically after OTP.</p>
+  <div class="seg glass"><button class="on" data-m="mobile">Mobile</button><button data-m="email">Email</button></div>
+  <div class="field glass"><span id="pre" style="color:var(--mute)">+91</span><input id="ident" inputmode="numeric" placeholder="10-digit mobile number" autocomplete="off"></div>
+  <label class="agree"><input type="checkbox" id="agree"><span>I agree to the <a id="tlink">Terms &amp; Conditions</a></span></label>
+  <button class="big" id="otp">Send OTP</button></div>
+  <div id="g2" style="display:none"><h3>Verify OTP</h3><p id="sent"></p>
+  <div class="field glass"><input id="code" inputmode="numeric" maxlength="6" placeholder="6-digit OTP" autocomplete="one-time-code"></div>
+  <button class="big" id="verify">Verify &amp; continue</button>
+  <button class="link" id="resend">Resend OTP</button><button class="link" id="change" style="color:var(--mute)">Change number or email</button>
+  <p class="legal note" style="margin-top:10px">Enter the 6-digit code we sent you. It expires in 5 minutes.</p></div>
+</div></div>
+<div class="modal" id="tmodal"><div class="sheet"><h3>Terms &amp; Conditions</h3>
+<ul><li>PAUDIVA is a marketplace; products are sold by independent sellers.</li><li>You are responsible for your account and must give accurate details.</li><li>Prices are in INR. Orders are confirmed when the seller accepts them.</li><li>Sellers deliver on their own. Live plants may vary slightly in appearance.</li><li>Cancel before dispatch for a full refund. Damaged items need photo proof.</li><li>Your delivery details are shared only with the seller of your order.</li></ul>
+<div class="two"><button class="ghost" id="tclose">Close</button><button class="pri" id="tagree">I agree</button></div>
+<button class="link" id="tfull">Read full terms</button></div></div>
+<div class="modal mid" id="amodal"><div class="sheet apop"><div class="av" id="aav">A</div><h3>Agent has joined</h3><p class="ps" id="atxt" style="margin:6px 0 16px"></p><div class="two"><button class="ghost" id="aclose">Later</button><button class="pri" id="aopen">Open chat</button></div></div></div>
+<div class="toast glass" id="toast"></div>
+
+<script>
+var CATS=["All","Indoor Plants","Outdoor Plants","Flowering Plants","Seeds","Gardening Tools","Pots & Planters","Soil & Fertilizers","Eco-friendly"];
+var STAT=["PLACED","CONFIRMED","PACKED","OUT_FOR_DELIVERY","DELIVERED"],STEPS=["Order placed","Seller confirmed","Packed","Out for delivery","Delivered"];
+var TC=["Order","Payment","Delivery","Refund","Account","Other"];
+var TSTAT={WAITING:"Waiting for agent",AGENT_CONNECTED:"Agent connected",RESOLVED:"Resolved"};
+var ALL={},cart={},cat="All",user=null,mode="mobile",cd=null,val="",tcat="Order",tks=[],cur=null,popId=null,seen={},st=null;
+var $=function(i){return document.getElementById(i)};
+var LEAF='<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M16 29V15M16 15C16 8 10 4 4 5c0 7 5 11 12 10zM16 19c0-5 4-8 11-8 0 6-4 9-11 8z"/></svg>';
+function esc(s){return String(s).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
+function rs(p){return "\u20B9"+(p/100).toLocaleString("en-IN",{maximumFractionDigits:2})}
+function api(path,opt){opt=opt||{};var o={method:opt.method||"GET",credentials:"same-origin",headers:{"Content-Type":"application/json"}};if(opt.body)o.body=JSON.stringify(opt.body);
+  return fetch(path,o).then(function(r){return r.json().catch(function(){return{}}).then(function(j){if(!r.ok){var e=new Error(j.error||"Something went wrong");e.data=j;throw e}return j})})}
+function fail(e){toast(e&&e.message?e.message:"Something went wrong")}
+function toast(t){var e=$("toast");e.textContent=t;e.classList.add("on");setTimeout(function(){e.classList.remove("on")},2200)}
+function card(p){return '<div class="p glass"><div class="img">'+LEAF+'</div><div class="pb"><div class="pn">'+esc(p.title)+'</div><div class="ps">'+esc(p.category)+' \u00b7 No reviews yet</div><div class="pr"><div class="price">'+rs(p.pricePaise)+'<s>'+rs(p.mrpPaise)+'</s></div><button class="add" data-add="'+esc(p.id)+'" aria-label="Add to cart"'+(p.stock<1?" disabled":"")+'>+</button></div></div></div>'}
+function keep(list){list.forEach(function(p){ALL[p.id]=p})}
+function chips(el){el.innerHTML=CATS.map(function(c){return '<button class="cat glass'+(c===cat?" on":"")+'" data-cat="'+esc(c)+'">'+esc(c)+"</button>"}).join("")}
+function loadHome(){api("/api/products").then(function(d){keep(d.products);$("featured").innerHTML=d.products.length?d.products.slice(0,6).map(card).join(""):'<div class="empty" style="grid-column:1/-1">No products yet.</div>'}).catch(fail)}
+function renderSearch(){chips($("searchcats"));clearTimeout(st);st=setTimeout(doSearch,220)}
+function doSearch(){var q=$("q").value.trim();api("/api/products?category="+encodeURIComponent(cat)+"&q="+encodeURIComponent(q)).then(function(d){keep(d.products);$("results").innerHTML=d.products.length?d.products.map(card).join(""):'<div class="empty" style="grid-column:1/-1">No products found.</div>';var s=$("sug");if(q&&d.products.length){s.style.display="block";s.innerHTML=d.products.slice(0,4).map(function(p){return '<button data-sug="'+esc(p.title)+'">'+esc(p.title)+"</button>"}).join("")}else s.style.display="none"}).catch(fail)}
+function cartCount(){return Object.keys(cart).reduce(function(a,k){return a+cart[k]},0)}
+function renderCart(){var ids=Object.keys(cart),t=0;
+  $("cartbox").innerHTML=ids.length?ids.map(function(i){var p=ALL[i];if(!p)return"";t+=p.pricePaise*cart[i];return '<div class="row"><div>'+esc(p.title)+'<div class="ps">'+rs(p.pricePaise)+'</div></div><div class="qty"><button data-q="'+esc(i)+'" data-d="-1">\u2212</button>'+cart[i]+'<button data-q="'+esc(i)+'" data-d="1">+</button></div></div>'}).join("")+'<div class="row" style="border:0"><b>Total</b><b class="price">'+rs(t)+"</b></div>":'<div class="empty">Your cart is empty.</div>';
+  var c=cartCount();$("cnt").textContent=c;$("cnt").style.display=c?"block":"none"}
+function moveInd(){var b=document.querySelector("nav button.on"),i=$("ind");if(!b||!i)return;i.style.width=b.offsetWidth+"px";i.style.transform="translateX("+b.offsetLeft+"px)"}
+function go(v){
+  document.querySelectorAll(".view").forEach(function(s){s.classList.toggle("on",s.id===v)});
+  var hit=false;document.querySelectorAll("nav button").forEach(function(b){var on=b.dataset.go===v;if(on)hit=true;b.classList.toggle("on",on)});
+  if(!hit){var a=document.querySelector('nav button[data-go="account"]');if(a)a.classList.add("on")}
+  if(location.hash!=="#"+v)history.replaceState(null,"","#"+v);
+  window.scrollTo(0,0);
+  if(v==="cart")renderCart();if(v==="search")renderSearch();if(v==="account")paintAcc();if(v==="support"){tchips();loadTk().catch(function(){})}
+  moveInd()}
+function showGate(){$("gate").style.display=user?"none":"flex"}
+function mask(u){return u.email?u.email:"+91 "+u.mobile.slice(0,2)+"XXXXXX"+u.mobile.slice(-2)}
+function paintAcc(){if(!user)return;$("av").textContent=(user.email?user.email[0]:"P").toUpperCase();$("un").textContent=user.email?user.email.split("@")[0]:"PAUDIVA member";$("uid").textContent=mask(user)+(user.role!=="BUYER"?" \u00b7 "+user.role:"");$("s-cart").textContent=cartCount();
+  api("/api/orders").then(function(d){$("s-orders").textContent=d.orders.length}).catch(function(){})}
+function openT(){$("tmodal").classList.add("on")}
+function closeT(){$("tmodal").classList.remove("on")}
+function step(n){$("g1").style.display=n===1?"block":"none";$("g2").style.display=n===2?"block":"none"}
+function cool(){var s=30,b=$("resend");b.disabled=true;clearInterval(cd);b.textContent="Resend OTP in 30s";cd=setInterval(function(){s--;b.textContent=s>0?"Resend OTP in "+s+"s":"Resend OTP";if(s<=0){clearInterval(cd);b.disabled=false}},1000)}
+function sendOtp(again){return api("/api/auth/request-otp",{method:"POST",body:{mode:mode,value:val}}).then(function(d){$("sent").textContent="We sent a 6-digit code to "+(mode==="mobile"?"+91 "+val:val);if(!again)step(2);cool();$("code").value="";if(d.devCode)toast("Test OTP: "+d.devCode);else if(again)toast("OTP sent again")}).catch(fail)}
+/* tickets */
+function tchips(){var e=$("tcats");e.innerHTML="";TC.forEach(function(c){var b=document.createElement("button");b.className="cat glass"+(c===tcat?" on":"");b.textContent=c;b.onclick=function(){tcat=c;tchips()};e.appendChild(b)})}
+function drawTk(){var e=$("tlist");e.innerHTML="";if(!tks.length){e.innerHTML='<div class="empty">No tickets yet.</div>';return}
+  tks.forEach(function(t){var d=document.createElement("div");d.className="glass";d.style.cssText="border-radius:18px;padding:12px 14px;margin-bottom:10px;cursor:pointer";var a=document.createElement("div");a.className="row";a.style.cssText="border:0;padding:0";var b=document.createElement("b");b.textContent=t.code+" \u00b7 "+t.category;var s=document.createElement("span");s.className="bd";s.textContent=TSTAT[t.status]||t.status;a.appendChild(b);a.appendChild(s);var p=document.createElement("div");p.className="ps";p.style.marginTop="6px";p.textContent=(t.orderCode?"Order "+t.orderCode+" \u2014 ":"")+"Tap to open chat";d.appendChild(a);d.appendChild(p);d.onclick=function(){openTk(t.code)};e.appendChild(d)})}
+function loadTk(){return api("/api/tickets").then(function(d){d.tickets.forEach(function(t){if(seen[t.code]==="WAITING"&&t.status==="AGENT_CONNECTED")agentPop(t);seen[t.code]=t.status});tks=d.tickets;drawTk()})}
+function renderChat(t){if(!t||t.code!==cur)return;$("kid").textContent=t.code+" \u00b7 "+t.category;$("kmeta").textContent=t.orderCode?"Order "+t.orderCode:"No order linked";$("kst").textContent=TSTAT[t.status]||t.status;$("kwait").style.display=t.status==="WAITING"?"flex":"none";
+  var c=$("chat");c.innerHTML="";t.messages.forEach(function(m){var d=document.createElement("div");d.className="msg "+(m.sender==="CUSTOMER"?"me":m.sender==="AGENT"?"agent":"sys");d.textContent=m.body;c.appendChild(d)});window.scrollTo(0,document.body.scrollHeight)}
+function loadChat(){if(!cur)return;api("/api/tickets/"+encodeURIComponent(cur)).then(renderChat).catch(function(){})}
+function openTk(code){cur=code;go("ticket");$("chat").innerHTML="";loadChat()}
+function agentPop(t){popId=t.code;$("atxt").textContent=(t.agentName||"A support agent")+" joined ticket "+t.code+".";$("aav").textContent=(t.agentName||"A")[0].toUpperCase();$("amodal").classList.add("on");try{navigator.vibrate&&navigator.vibrate(60)}catch(e){}}
+function sendMsg(){var x=$("kin").value.trim().slice(0,1000);if(!cur||!x)return;$("kin").value="";api("/api/tickets/"+encodeURIComponent(cur)+"/messages",{method:"POST",body:{body:x}}).then(renderChat).catch(fail)}
+function trackOrder(){var c=$("oid").value.trim().toUpperCase();if(!c)return toast("Enter your order ID");
+  api("/api/orders/"+encodeURIComponent(c)).then(function(o){var i=STAT.indexOf(o.status),h;
+    if(o.status==="CANCELLED")h='<div class="glass" style="border-radius:20px;padding:16px;margin-top:14px"><b>'+esc(o.code)+'</b><div class="ps" style="margin-top:6px">This order was cancelled.</div></div>';
+    else h='<div class="glass" style="border-radius:20px;padding:16px;margin-top:14px"><b>'+esc(o.code)+" \u00b7 "+rs(o.totalPaise)+'</b><div class="ps" style="margin-top:4px">'+o.items.map(function(x){return esc(x.title)+" \u00d7 "+x.quantity}).join(", ")+'</div><div class="ps">'+esc(o.paymentMethod)+" \u00b7 payment "+esc(o.paymentStatus.toLowerCase())+'</div><div class="tl">'+STEPS.map(function(s,k){return '<div class="st'+(k<=i?" done":"")+'">'+s+(k===i?"<small>Current status</small>":"")+"</div>"}).join("")+"</div></div>";
+    $("tres").innerHTML=h}).catch(function(e){$("tres").innerHTML='<div class="empty">'+(e.message==="Please log in"?"Please log in to track orders.":"No order found. Check the ID and try again.")+"</div>"})}
+/* events */
+document.addEventListener("click",function(e){
+  var t=e.target.closest("[data-go],[data-add],[data-cat],[data-q],[data-sug]");if(!t)return;
+  if(t.dataset.go)(t.dataset.go==="terms"?openT():go(t.dataset.go));
+  else if(t.dataset.add){var id=t.dataset.add,p=ALL[id],n=(cart[id]||0)+1;if(p&&n>p.stock)return toast("Only "+p.stock+" in stock");cart[id]=n;renderCart();toast("Added to cart")}
+  else if(t.dataset.cat){cat=t.dataset.cat;chips($("homecats"));if($("search").classList.contains("on"))renderSearch();else go("search")}
+  else if(t.dataset.q){var k=t.dataset.q,p2=ALL[k],nq=cart[k]+Number(t.dataset.d);if(nq<1)delete cart[k];else if(p2&&nq>p2.stock)toast("Only "+p2.stock+" in stock");else cart[k]=nq;renderCart()}
+  else if(t.dataset.sug){$("q").value=t.dataset.sug;renderSearch()}});
+$("q").addEventListener("input",renderSearch);
+$("tbtn").onclick=trackOrder;
+$("checkout").onclick=function(){var ids=Object.keys(cart);if(!ids.length)return toast("Cart is empty");
+  var b={items:ids.map(function(i){return{productId:i,qty:cart[i]}}),name:$("cname").value.trim(),mobile:$("cmob").value.trim(),address:$("cadr").value.trim(),pincode:$("cpin").value.trim()};
+  if(b.name.length<2)return toast("Enter your name");if(!/^[6-9][0-9]{9}$/.test(b.mobile))return toast("Enter a valid delivery mobile number");if(b.address.length<10)return toast("Enter your full address");if(!/^[1-9][0-9]{5}$/.test(b.pincode))return toast("Enter a valid PIN code");
+  $("checkout").disabled=true;
+  api("/api/orders",{method:"POST",body:b}).then(function(d){cart={};renderCart();toast("Order placed: "+d.code);$("oid").value=d.code;go("track");trackOrder()}).catch(fail).then(function(){$("checkout").disabled=false})};
+document.querySelectorAll(".seg button").forEach(function(b){b.onclick=function(){mode=b.dataset.m;document.querySelectorAll(".seg button").forEach(function(x){x.classList.toggle("on",x===b)});$("pre").style.display=mode==="mobile"?"inline":"none";$("ident").value="";$("ident").inputMode=mode==="mobile"?"numeric":"email";$("ident").placeholder=mode==="mobile"?"10-digit mobile number":"you@example.com"}});
+$("otp").onclick=function(){val=$("ident").value.trim().toLowerCase();var okv=mode==="mobile"?/^[6-9][0-9]{9}$/.test(val):/^[^@ ]+@[^@ ]+\.[^@ ]+$/.test(val);
+  if(!okv)return toast(mode==="mobile"?"Enter a valid 10-digit mobile":"Enter a valid email");if(!$("agree").checked)return toast("Please accept the Terms");sendOtp(false)};
+$("resend").onclick=function(){sendOtp(true)};
+$("change").onclick=function(){clearInterval(cd);step(1)};
+$("verify").onclick=function(){if(!/^[0-9]{6}$/.test($("code").value))return toast("Enter the 6-digit OTP");
+  api("/api/auth/verify-otp",{method:"POST",body:{mode:mode,value:val,code:$("code").value}}).then(function(d){user=d.user;showGate();paintAcc();go("home");toast("Welcome to PAUDIVA");loadTk().catch(function(){})}).catch(fail)};
+$("logout").onclick=function(){api("/api/auth/logout",{method:"POST"}).catch(function(){}).then(function(){user=null;tks=[];seen={};cur=null;step(1);$("ident").value="";$("agree").checked=false;showGate();go("home")})};
+$("tlink").onclick=openT;$("tclose").onclick=closeT;
+$("tagree").onclick=function(){$("agree").checked=true;closeT()};
+$("tfull").onclick=function(){closeT();if(user)go("terms");else toast("Login to read the full terms")};
+$("tmodal").onclick=function(e){if(e.target===this)closeT()};
+$("tsend").onclick=function(){var d=$("tdesc").value.trim();if(d.length<10)return toast("Please describe the issue (10+ characters)");
+  api("/api/tickets",{method:"POST",body:{category:tcat,orderCode:$("torder").value.trim(),description:d}}).then(function(t){seen[t.code]="WAITING";$("tdesc").value="";$("torder").value="";toast("Ticket created");loadTk().catch(function(){});openTk(t.code)}).catch(fail)};
+$("ksend").onclick=sendMsg;$("kin").addEventListener("keydown",function(e){if(e.key==="Enter")sendMsg()});
+$("kback").onclick=function(){go("support")};
+$("aclose").onclick=function(){$("amodal").classList.remove("on")};
+$("aopen").onclick=function(){$("amodal").classList.remove("on");if(popId)openTk(popId)};
+setInterval(function(){if(!user||document.hidden)return;loadTk().catch(function(){});if(cur&&$("ticket").classList.contains("on"))loadChat()},4000);
+/* nav drag */
+(function(){var n=$("nav"),i=$("ind"),btns=[].slice.call(n.querySelectorAll("button")),drag=false,moved=false,sx=0;
+  function pick(x){var r=n.getBoundingClientRect(),px=x-r.left,best=null,bd=1e9;btns.forEach(function(b){var d=Math.abs(b.offsetLeft+b.offsetWidth/2-px);if(d<bd){bd=d;best=b}});return best}
+  n.addEventListener("pointerdown",function(e){drag=true;moved=false;sx=e.clientX});
+  n.addEventListener("pointermove",function(e){if(!drag)return;if(!moved&&Math.abs(e.clientX-sx)<8)return;moved=true;i.classList.add("drag");var r=n.getBoundingClientRect(),w=i.offsetWidth,x=Math.max(4,Math.min(e.clientX-r.left-w/2,r.width-w-4));i.style.transform="translateX("+x+"px) scale(1.12,1.07)"});
+  n.addEventListener("pointerup",function(e){if(!drag)return;drag=false;i.classList.remove("drag");if(moved){var b=pick(e.clientX);if(b)go(b.dataset.go)}moved=false;moveInd()});
+  n.addEventListener("pointercancel",function(){drag=false;moved=false;i.classList.remove("drag");moveInd()})})();
+window.addEventListener("load",moveInd);window.addEventListener("resize",moveInd);setTimeout(moveInd,50);
+/* start */
+chips($("homecats"));loadHome();renderCart();
+api("/api/me").then(function(d){user=d.user;showGate();if(user){paintAcc();loadTk().catch(function(){})}}).catch(function(){showGate()});
+var h=location.hash.slice(1);if(h&&$(h)&&$(h).classList.contains("view")&&h!=="ticket")go(h);
+</script>
+</body>
+</html>
