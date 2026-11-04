@@ -219,6 +219,7 @@ nav button svg{transition:transform .55s cubic-bezier(.22,1.25,.36,1)}
 
 <section class="view" id="account">
   <h2 style="margin-top:18px">My account</h2>
+  <button class="big" id="loginOpen">Login / Create account</button>
   <div class="prof glass"><div class="av" id="av">P</div><div><b id="un" style="font-size:17px"></b><div class="ps" id="uid"></div><span class="bd">✓ Verified</span><span class="bd">Buyer</span><span class="bd n">Seller: not registered</span></div></div>
   <div class="stats"><div class="glass"><b id="s-orders">0</b>Orders</div><div class="glass"><b>0</b>Wishlist</div><div class="glass"><b id="s-cart">0</b>In cart</div></div>
   <h2>More</h2>
@@ -347,9 +348,9 @@ function go(v){
   window.scrollTo(0,0);
   if(v==="cart")renderCart();if(v==="search")renderSearch();if(v==="account")paintAcc();if(v==="support"){tchips();loadTk().catch(function(){})}
   moveInd()}
-function showGate(){$("gate").style.display=user?"none":"flex"}
+function showGate(){$("gate").style.display="none"}
 function mask(u){return u.email?u.email:"+91 "+u.mobile.slice(0,2)+"XXXXXX"+u.mobile.slice(-2)}
-function paintAcc(){if(!user)return;$("av").textContent=(user.email?user.email[0]:"P").toUpperCase();$("un").textContent=user.email?user.email.split("@")[0]:"PAUDIVA member";$("uid").textContent=mask(user)+(user.role!=="BUYER"?" \u00b7 "+user.role:"");$("s-cart").textContent=cartCount();
+function paintAcc(){if(!user){$("un").textContent="Guest";$("uid").textContent="Browse PAUDIVA without signing in";$("logout").style.display="none";return;}$("logout").style.display="block";$("av").textContent=(user.email?user.email[0]:"P").toUpperCase();$("un").textContent=user.email?user.email.split("@")[0]:"PAUDIVA member";$("uid").textContent=mask(user)+(user.role!=="BUYER"?" \u00b7 "+user.role:"");$("s-cart").textContent=cartCount();
   api("/api/orders").then(function(d){$("s-orders").textContent=d.orders.length}).catch(function(){})}
 function openT(){$("tmodal").classList.add("on")}
 function closeT(){$("tmodal").classList.remove("on")}
@@ -381,6 +382,7 @@ document.addEventListener("click",function(e){
   else if(t.dataset.q){var k=t.dataset.q,p2=ALL[k],nq=cart[k]+Number(t.dataset.d);if(nq<1)delete cart[k];else if(p2&&nq>p2.stock)toast("Only "+p2.stock+" in stock");else cart[k]=nq;renderCart()}
   else if(t.dataset.sug){$("q").value=t.dataset.sug;renderSearch()}});
 $("q").addEventListener("input",renderSearch);
+$("loginOpen").onclick=function(){$("gate").style.display="flex"};
 $("tbtn").onclick=trackOrder;
 $("checkout").onclick=function(){var ids=Object.keys(cart);if(!ids.length)return toast("Cart is empty");
   var b={items:ids.map(function(i){return{productId:i,qty:cart[i]}}),name:$("cname").value.trim(),mobile:$("cmob").value.trim(),address:$("cadr").value.trim(),pincode:$("cpin").value.trim()};
