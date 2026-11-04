@@ -320,7 +320,9 @@ nav button svg{transition:transform .55s cubic-bezier(.22,1.25,.36,1)}
   <div class="seg glass"><button class="on" data-m="mobile">Mobile</button><button data-m="email">Email</button></div>
   <div class="field glass"><span id="pre" style="color:var(--mute)">+91</span><input id="ident" inputmode="numeric" placeholder="10-digit mobile number" autocomplete="off"></div>
   <label class="agree"><input type="checkbox" id="agree"><span>I agree to the <a id="tlink">Terms &amp; Conditions</a></span></label>
-  <button class="big" id="otp">Send OTP</button></div>
+  <button class="big" id="otp">Send OTP</button>
+  <button class="big" id="demoLogin" style="margin-top:10px;background:linear-gradient(120deg,#527d43,#82a85c)">Continue with Demo Login</button>
+  <p class="legal note" style="text-align:center;margin-top:8px">Presentation demo only · No real account or orders</p></div>
   <div id="g2" style="display:none"><h3>Verify OTP</h3><p id="sent"></p>
   <div class="field glass"><input id="code" inputmode="numeric" maxlength="6" placeholder="6-digit OTP" autocomplete="one-time-code"></div>
   <button class="big" id="verify">Verify &amp; continue</button>
@@ -410,11 +412,20 @@ $("checkout").onclick=function(){var ids=Object.keys(cart);if(!ids.length)return
 document.querySelectorAll(".seg button").forEach(function(b){b.onclick=function(){mode=b.dataset.m;document.querySelectorAll(".seg button").forEach(function(x){x.classList.toggle("on",x===b)});$("pre").style.display=mode==="mobile"?"inline":"none";$("ident").value="";$("ident").inputMode=mode==="mobile"?"numeric":"email";$("ident").placeholder=mode==="mobile"?"10-digit mobile number":"you@example.com"}});
 $("otp").onclick=function(){val=$("ident").value.trim().toLowerCase();var okv=mode==="mobile"?/^[6-9][0-9]{9}$/.test(val):/^[^@ ]+@[^@ ]+\.[^@ ]+$/.test(val);
   if(!okv)return toast(mode==="mobile"?"Enter a valid 10-digit mobile":"Enter a valid email");if(!$("agree").checked)return toast("Please accept the Terms");sendOtp(false)};
+$("demoLogin").onclick=function(){
+  var n=$("ident").value.trim();
+  if(!/^\d{10}$/.test(n))return toast("Enter any 10-digit demo number");
+  if(!$("agree").checked)return toast("Please accept the Terms");
+  user={mobile:n,email:null,role:"BUYER",demo:true};
+  sessionStorage.setItem("paudiva_demo_user",JSON.stringify(user));
+  showGate();paintAcc();go("home");
+  toast("Demo login active — presentation mode");
+};
 $("resend").onclick=function(){sendOtp(true)};
 $("change").onclick=function(){clearInterval(cd);step(1)};
 $("verify").onclick=function(){if(!/^[0-9]{6}$/.test($("code").value))return toast("Enter the 6-digit OTP");
   api("/api/auth/verify-otp",{method:"POST",body:{mode:mode,value:val,code:$("code").value}}).then(function(d){user=d.user;showGate();paintAcc();go("home");toast("Welcome to PAUDIVA");loadTk().catch(function(){})}).catch(fail)};
-$("logout").onclick=function(){api("/api/auth/logout",{method:"POST"}).catch(function(){}).then(function(){user=null;tks=[];seen={};cur=null;step(1);$("ident").value="";$("agree").checked=false;showGate();go("home")})};
+$("logout").onclick=function(){api("/api/auth/logout",{method:"POST"}).catch(function(){}).then(function(){user=null;sessionStorage.removeItem("paudiva_demo_user");tks=[];seen={};cur=null;step(1);$("ident").value="";$("agree").checked=false;showGate();go("home")})};
 $("tlink").onclick=openT;$("tclose").onclick=closeT;
 $("tagree").onclick=function(){$("agree").checked=true;closeT()};
 $("tfull").onclick=function(){closeT();if(user)go("terms");else toast("Login to read the full terms")};
@@ -436,7 +447,13 @@ setInterval(function(){if(!user||document.hidden)return;loadTk().catch(function(
 window.addEventListener("load",moveInd);window.addEventListener("resize",moveInd);setTimeout(moveInd,50);
 /* start */
 chips($("homecats"));loadHome();renderCart();
-api("/api/me").then(function(d){user=d.user;showGate();if(user){paintAcc();loadTk().catch(function(){})}}).catch(function(){showGate()});
+api("/api/me").then(function(d){
+  user=d.user||JSON.parse(sessionStorage.getItem("paudiva_demo_user")||"null");
+  showGate();if(user){paintAcc();if(!user.demo)loadTk().catch(function(){})}
+}).catch(function(){
+  user=JSON.parse(sessionStorage.getItem("paudiva_demo_user")||"null");
+  showGate();if(user)paintAcc()
+});
 var h=location.hash.slice(1);if(h&&$(h)&&$(h).classList.contains("view")&&h!=="ticket")go(h);
 </script>
 </body>
